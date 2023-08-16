@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HeaderComponent } from "./header.component";
 import { FooterComponent } from "./footer.component";
 import { MaterialModule } from "./shared/material.module";
+import { HomeComponent } from "./home/home.component";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { MaterialModule } from "./shared/material.module";
     NotFoundComponent,
     HeaderComponent,
     FooterComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

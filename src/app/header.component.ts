@@ -8,8 +8,12 @@ import { Component } from "@angular/core";
         <span>Angular samples</span>
         <span class="example-spacer"></span>
 
-        <button mat-button>Home</button>
-        <button mat-button>Person</button>
+        <button mat-button routerLink="/home" routerLinkActive="active">
+          Home
+        </button>
+        <button mat-button routerLink="/person" routerLinkActive="active">
+          Person
+        </button>
         <!-- <button
           mat-icon-button
           class="example-icon favorite-icon"
@@ -31,6 +35,10 @@ import { Component } from "@angular/core";
     `
       .example-spacer {
         flex: 1 1 auto;
+      }
+
+      .active {
+        background: #440085;
       }
     `,
   ],
