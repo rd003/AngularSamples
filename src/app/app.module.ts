@@ -9,6 +9,7 @@ import { HeaderComponent } from "./header.component";
 import { FooterComponent } from "./footer.component";
 import { MaterialModule } from "./shared/material.module";
 import { HomeComponent } from "./home/home.component";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { HomeComponent } from "./home/home.component";
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

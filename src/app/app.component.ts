@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
   selector: "app-root",
@@ -28,12 +28,9 @@ import { Component } from "@angular/core";
         font-size: 16px;
         margin-top: auto;
       }
-
-      .footer a {
-        color: black;
-      }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   title = "AngularSamples";

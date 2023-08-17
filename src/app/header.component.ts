@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
   selector: "app-header",
@@ -14,14 +14,14 @@ import { Component } from "@angular/core";
         <button mat-button routerLink="/person" routerLinkActive="active">
           Person
         </button>
-        <!-- <button
+        <button
           mat-icon-button
           class="example-icon favorite-icon"
           aria-label="Example icon-button with heart icon"
         >
           <mat-icon>favorite</mat-icon>
         </button>
-        <button
+        <!--    <button
           mat-icon-button
           class="example-icon"
           aria-label="Example icon-button with share icon"
@@ -42,5 +42,6 @@ import { Component } from "@angular/core";
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {}
