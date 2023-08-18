@@ -10,6 +10,7 @@ import { FooterComponent } from "./footer.component";
 import { MaterialModule } from "./shared/material.module";
 import { HomeComponent } from "./home/home.component";
 import { HttpClientModule } from "@angular/common/http";
+import { DialogComponent } from './shard/dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { HttpClientModule } from "@angular/common/http";
     HeaderComponent,
     FooterComponent,
     HomeComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,

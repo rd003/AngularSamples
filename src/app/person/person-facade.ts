@@ -22,10 +22,18 @@ export class PersonFacade {
           // emmiting starting values
           startWith({ person: {} as Person, action: "Remove" as actionType }),
           scan(
-            (acc, curr) =>
-              curr.action === "Add"
-                ? [...acc, curr.person]
-                : acc.filter((a) => a.id != curr.person.id),
+            (acc, curr) => {
+              if (curr.action === "Add") {
+                return [...acc, curr.person];
+              } else if (curr.action === "Update") {
+                return acc.map((a) =>
+                  a.id === curr.person.id ? curr.person : a
+                );
+              } else if (curr.action === "Delete") {
+                return acc.filter((a) => a.id != curr.person.id);
+              }
+              return acc;
+            },
             [...initialPeople]
           )
         )

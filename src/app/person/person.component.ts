@@ -1,9 +1,16 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  inject,
+} from "@angular/core";
 import { PersonFacade } from "./person-facade";
-import { catchError, of } from "rxjs";
+import { Subject, catchError, of, takeUntil, tap } from "rxjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { generateGUID } from "ngx-rlibs";
 import { Person } from "./person.model";
+import { DialogComponent } from "../shard/dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-person",
@@ -53,6 +60,7 @@ import { Person } from "./person.model";
       <!-- people form -->
       <div class="people-form">
         <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
+          <input type="hidden" formControlName="id" />
           <p>
             <mat-form-field appearance="fill">
               <mat-label>Enter name</mat-label>
@@ -104,8 +112,10 @@ import { Person } from "./person.model";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PersonComponent {
+export class PersonComponent implements OnDestroy {
   private readonly personFacade = inject(PersonFacade);
+  private readonly dialog = inject(MatDialog);
+  destroyed$ = new Subject<boolean>();
   people$ = this.personFacade.people$.pipe(
     catchError((error) => {
       console.log(error);
@@ -116,8 +126,8 @@ export class PersonComponent {
   displayedColumns: string[] = ["Id", "Name", "Actions"];
 
   personForm = new FormGroup({
-    id: new FormControl(null),
-    name: new FormControl("", Validators.required),
+    id: new FormControl<string | null>(null),
+    name: new FormControl<string>("", Validators.required),
   });
 
   get f() {
@@ -125,14 +135,44 @@ export class PersonComponent {
   }
   onSubmit() {
     const person = Object.assign(this.personForm.value);
-    person.id = generateGUID();
-    this.personFacade.modifyPerson(person, "Add");
+    if (!person.id) {
+      person.id = generateGUID();
+      this.personFacade.modifyPerson(person, "Add");
+    } else {
+      this.personFacade.modifyPerson(person, "Update");
+    }
     this.personForm.reset();
   }
 
   onEdit(person: Person) {
-    // this.personForm.patchValue();
+    this.personForm.patchValue(person);
   }
 
-  onDelete(person: Person) {}
+  onDelete(person: Person) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: "350px",
+      data: { message: `💀Are you sure to delete '${person.name}'? ` },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        tap((val) => {
+          if (val) {
+            this.personFacade.modifyPerson(person, "Delete");
+          }
+        }),
+        catchError((error) => {
+          console.log(error);
+          return of(error);
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.unsubscribe();
+  }
 }
