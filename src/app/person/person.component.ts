@@ -136,7 +136,7 @@ export class PersonComponent implements OnDestroy {
   onSubmit() {
     const person = Object.assign(this.personForm.value);
     if (!person.id) {
-      person.id = generateGUID();
+      // person.id = generateGUID();
       this.personFacade.modifyPerson(person, "Add");
     } else {
       this.personFacade.modifyPerson(person, "Update");
