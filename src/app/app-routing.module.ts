@@ -18,6 +18,11 @@ const routes: Routes = [
     loadChildren: () =>
       import("./person/person.module").then((a) => a.PersonModule),
   },
+
+  {
+    path: "users",
+    loadChildren: () => import("./user/user.module").then((a) => a.UserModule),
+  },
   {
     path: "**",
     component: NotFoundComponent,

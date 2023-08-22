@@ -14,6 +14,10 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
         <button mat-button routerLink="/person" routerLinkActive="active">
           Person
         </button>
+
+        <button mat-button routerLink="/users" routerLinkActive="active">
+          Users
+        </button>
         <button
           mat-icon-button
           class="example-icon favorite-icon"
