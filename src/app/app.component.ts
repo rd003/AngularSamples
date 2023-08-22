@@ -1,11 +1,13 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
   selector: "app-root",
   template: `
     <div class="main">
       <app-header />
-      <div class="content">hello</div>
+      <div class="content">
+        <router-outlet />
+      </div>
       <app-footer class="footer" />
     </div>
   `,
@@ -26,12 +28,9 @@ import { Component } from "@angular/core";
         font-size: 16px;
         margin-top: auto;
       }
-
-      .footer a {
-        color: black;
-      }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   title = "AngularSamples";

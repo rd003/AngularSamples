@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
   selector: "app-header",
@@ -8,16 +8,24 @@ import { Component } from "@angular/core";
         <span>Angular samples</span>
         <span class="example-spacer"></span>
 
-        <button mat-button>Home</button>
-        <button mat-button>Person</button>
-        <!-- <button
+        <button mat-button routerLink="/home" routerLinkActive="active">
+          Home
+        </button>
+        <button mat-button routerLink="/person" routerLinkActive="active">
+          Person
+        </button>
+
+        <button mat-button routerLink="/users" routerLinkActive="active">
+          Users
+        </button>
+        <button
           mat-icon-button
           class="example-icon favorite-icon"
           aria-label="Example icon-button with heart icon"
         >
           <mat-icon>favorite</mat-icon>
         </button>
-        <button
+        <!--    <button
           mat-icon-button
           class="example-icon"
           aria-label="Example icon-button with share icon"
@@ -32,7 +40,12 @@ import { Component } from "@angular/core";
       .example-spacer {
         flex: 1 1 auto;
       }
+
+      .active {
+        background: #440085;
+      }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {}
