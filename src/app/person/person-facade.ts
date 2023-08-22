@@ -11,7 +11,6 @@ import {
   scan,
   startWith,
   switchMap,
-  tap,
 } from "rxjs";
 import { actionType } from "../shared/shared-types";
 
