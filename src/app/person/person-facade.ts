@@ -31,65 +31,23 @@ export class PersonFacade {
       this.modifyPersonSubject.pipe(
         // emmiting starting values
         startWith({ person: {} as Person, action: "None" as actionType }),
-        scan((acc, curr) => {
-          if (curr.action === "None") return acc;
-          if (curr.action === "Add")
-            return this.handleAddPerson(acc, curr.person);
-          if (curr.action === "Delete")
-            return this.handleDelete(acc, curr.person);
-          if (curr.action === "Update")
-            return this.handleUpdate(acc, curr.person);
-          return acc;
-        }, of([...initialPeople]))
+        scan(
+          (acc, curr) => {
+            if (curr.action === "None") return acc;
+            if (curr.action === "Add") return [...acc, curr.person];
+            if (curr.action === "Delete")
+              return acc.filter((p) => p.id !== curr.person.id);
+            if (curr.action === "Update")
+              return acc.map((p) =>
+                p.id === curr.person.id ? curr.person : p
+              );
+            return acc;
+          },
+          [...initialPeople]
+        )
       )
     )
   );
-
-  handleAddPerson(acc: Observable<Person[]>, person: Person) {
-    return this.personService.createPerson(person).pipe(
-      catchError((error) => {
-        console.log(error);
-        return NEVER;
-      }),
-      switchMap((res: Person) => {
-        // Update and return the accumulator with the new person
-        const updatedPeople = acc.pipe(map((a) => [...a, res]));
-        return updatedPeople; // Return the updated array as an observable
-      })
-    );
-  }
-
-  handleDelete(acc: Observable<Person[]>, person: Person) {
-    return this.personService.deletePerson(person.id).pipe(
-      catchError((error) => {
-        console.log(error);
-        return NEVER;
-      }),
-      switchMap((res: Person) => {
-        // Update and return the accumulator with the new person
-        const updatedPeople = acc.pipe(
-          map((a) => a.filter((p) => p.id !== person.id))
-        );
-        return updatedPeople; // Return the updated array as an observable
-      })
-    );
-  }
-
-  handleUpdate(acc: Observable<Person[]>, person: Person) {
-    return this.personService.deletePerson(person.id).pipe(
-      catchError((error) => {
-        console.log(error);
-        return NEVER;
-      }),
-      switchMap((res: Person) => {
-        // Update and return the accumulator with the new person
-        const updatedPeople = acc.pipe(
-          map((a) => a.map((p) => (p.id === person.id ? person : p)))
-        );
-        return updatedPeople; // Return the updated array as an observable
-      })
-    );
-  }
 
   modifyPerson(person: Person, action: actionType) {
     this.modifyPersonSubject.next({ person, action });
