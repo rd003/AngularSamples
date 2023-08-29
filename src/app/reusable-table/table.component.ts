@@ -13,14 +13,14 @@ import {
   template: `
     <h1>Users</h1>
     <app-table-layout [data]="users">
-      <ng-template #headers>
+      <ng-template table-template-headers>
         <th>FirstName</th>
         <th>LastName</th>
         <th>Email</th>
         <th>Action</th>
       </ng-template>
 
-      <ng-template #rows let-row>
+      <ng-template table-template-rows let-row>
         <td>{{ row.firstname }}</td>
         <td>{{ row.lastname }}</td>
         <td>{{ row.email }}</td>
@@ -37,7 +37,7 @@ import {
 
     <h2>Products</h2>
     <app-table-layout [data]="products">
-      <ng-template #headers>
+      <ng-template table-template-headers>
         <th>Category</th>
         <th>Price</th>
         <th>Book Title</th>

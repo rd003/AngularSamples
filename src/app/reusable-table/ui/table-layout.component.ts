@@ -5,6 +5,8 @@ import {
   Input,
   TemplateRef,
 } from "@angular/core";
+import { TableTemplateHeadersDirective } from "../table-template-header.directive";
+import { TableTemplateRowsDirective } from "../table-template-rows.directive";
 
 @Component({
   selector: "app-table-layout",
@@ -71,6 +73,8 @@ import {
 })
 export class TableLayoutComponent {
   @Input() data!: any[];
-  @ContentChild("headers") headers!: TemplateRef<any>;
-  @ContentChild("rows") rows!: TemplateRef<any>;
+  @ContentChild(TableTemplateHeadersDirective, { read: TemplateRef })
+  headers!: TemplateRef<any>;
+  @ContentChild(TableTemplateRowsDirective, { read: TemplateRef })
+  rows!: TemplateRef<any>;
 }
