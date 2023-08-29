@@ -22,6 +22,13 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
           Greeting
         </button>
         <button
+          mat-button
+          routerLink="/reusable-tables"
+          routerLinkActive="active"
+        >
+          Tables
+        </button>
+        <button
           mat-icon-button
           class="example-icon favorite-icon"
           aria-label="Example icon-button with heart icon"
