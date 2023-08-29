@@ -24,6 +24,13 @@ const routes: Routes = [
     loadChildren: () => import("./user/user.module").then((a) => a.UserModule),
   },
   {
+    path: "greeting",
+    loadChildren: () =>
+      import("./ng-template1/ng-template1.module").then(
+        (a) => a.NgTemplate1Module
+      ),
+  },
+  {
     path: "**",
     component: NotFoundComponent,
   },
