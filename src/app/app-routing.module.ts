@@ -31,6 +31,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: "reusable-tables",
+    loadChildren: () =>
+      import("./reusable-table/reusable-table.module").then(
+        (m) => m.ReusableTableModule
+      ),
+  },
+  {
     path: "**",
     component: NotFoundComponent,
   },
