@@ -11,6 +11,9 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
         <button mat-button routerLink="/home" routerLinkActive="active">
           Home
         </button>
+        <button mat-button routerLink="/books" routerLinkActive="active">
+          Books
+        </button>
         <button mat-button routerLink="/person" routerLinkActive="active">
           Person
         </button>
