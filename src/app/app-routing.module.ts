@@ -39,8 +39,7 @@ const routes: Routes = [
   },
   {
     path: "books",
-    loadChildren: () =>
-      import("./book/book-routing.module").then((m) => m.BookRoutingModule),
+    loadChildren: () => import("./book/book.module").then((m) => m.BookModule),
   },
   {
     path: "**",

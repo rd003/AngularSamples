@@ -10,3 +10,22 @@ export interface Book {
   year: number;
   price: number;
 }
+
+export interface PaginationData {
+  totalRecords: number;
+  totalPages: number;
+}
+
+export interface PagedBook {
+  books: Book[];
+  paginationData: PaginationData;
+}
+
+export interface GetBookParams {
+  page?: number;
+  limit?: number;
+  language?: string | null;
+  searchTerm?: string | null;
+  sortColumn?: string | null;
+  sortDirection?: string | null;
+}
