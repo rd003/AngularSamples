@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core";
-import { Book, PagedBook } from "./book.model";
+import { Book, GetBookParams, PagedBook } from "./book.model";
 import { HttpErrorResponse } from "@angular/common/http";
-import { pipe, switchMap, tap, withLatestFrom } from "rxjs";
+import { combineLatest, pipe, switchMap, tap, withLatestFrom } from "rxjs";
 import {
   ComponentStore,
   OnStateInit,
@@ -102,20 +102,45 @@ export class BookStore
     })
   );
 
-  loadBooks = this.effect<void>(
+  // loadBooks = this.effect<void>(
+  //   pipe(
+  //     withLatestFrom(
+  //       this._page$,
+  //       this._limit$,
+  //       this._searchTerm$,
+  //       this._selectedLanguages$,
+  //       this._sortColumn$,
+  //       this._sortDirection$
+  //     ),
+  //     tap(() => this.#setLoading()),
+  //     switchMap(
+  //       ([_, page, limit, searchTerm, language, sortColumn, sortDirection]) => {
+  //         return this._bookService
+  //           .getBooks({
+  //             page,
+  //             limit,
+  //             searchTerm,
+  //             language,
+  //             sortColumn,
+  //             sortDirection,
+  //           })
+  //           .pipe(
+  //             tapResponse(
+  //               (pagedBook: PagedBook) => this.#addAll(pagedBook),
+  //               (error: HttpErrorResponse) => this.#setError(error)
+  //             )
+  //           );
+  //       }
+  //     )
+  //   )
+  // );
+
+  loadBooks = this.effect<GetBookParams>(
     pipe(
-      withLatestFrom(
-        this._page$,
-        this._limit$,
-        this._searchTerm$,
-        this._selectedLanguages$,
-        this._sortColumn$,
-        this._sortDirection$
-      ),
       tap(() => this.#setLoading()),
       switchMap(
-        ([_, page, limit, searchTerm, language, sortColumn, sortDirection]) =>
-          this._bookService
+        ({ page, limit, searchTerm, language, sortColumn, sortDirection }) => {
+          return this._bookService
             .getBooks({
               page,
               limit,
@@ -129,7 +154,8 @@ export class BookStore
                 (pagedBook: PagedBook) => this.#addAll(pagedBook),
                 (error: HttpErrorResponse) => this.#setError(error)
               )
-            )
+            );
+        }
       )
     )
   );
@@ -138,6 +164,28 @@ export class BookStore
     this.setState({ ..._initialState });
   }
   ngrxOnStateInit() {
-    this.loadBooks();
+    combineLatest([
+      this._page$,
+      this._limit$,
+      this._searchTerm$,
+      this._selectedLanguages$,
+      this._sortColumn$,
+      this._sortDirection$,
+    ])
+      .pipe(
+        tap(
+          ([page, limit, searchTerm, language, sortColumn, sortDirection]) => {
+            this.loadBooks({
+              page,
+              limit,
+              searchTerm,
+              language,
+              sortColumn,
+              sortDirection,
+            });
+          }
+        )
+      )
+      .subscribe();
   }
 }
