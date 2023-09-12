@@ -41,7 +41,7 @@ export class BookStore
 {
   private readonly _bookService = inject(BookService);
   private readonly _books$ = this.select((s) => s.pagedBooks.books);
-  private readonly _totalPages$ = this.select(
+  private readonly _totalRecords$ = this.select(
     (s) => s.pagedBooks.paginationData.totalRecords
   );
   private readonly _loading$ = this.select((s) => s.loading);
@@ -60,8 +60,9 @@ export class BookStore
       books: this._books$,
       loading: this._loading$,
       error: this._error$,
-      totalPages: this._totalPages$,
+      totalRecords: this._totalRecords$,
       page: this._page$,
+      pageLimit: this._limit$,
     },
     { debounce: true }
   );
@@ -80,17 +81,17 @@ export class BookStore
   }));
 
   setPage = this.updater((state, page: number) => ({ ...state, page }));
-  #setLimit = this.updater((state, limit: number) => ({ ...state, limit }));
-  #setSearchTerm = this.updater((state, searchTerm: string) => ({
+  setLimit = this.updater((state, limit: number) => ({ ...state, limit }));
+  setSearchTerm = this.updater((state, searchTerm: string) => ({
     ...state,
     searchTerm,
   }));
-  #setLanguages = this.updater((state, selectedLanguages: string[]) => ({
+  setLanguages = this.updater((state, selectedLanguages: string[]) => ({
     ...state,
     selectedLanguages,
   }));
 
-  #setSortColumn = this.updater((state, sortColumn: string) => ({
+  setSortColumn = this.updater((state, sortColumn: string) => ({
     ...state,
     sortColumn,
   }));
@@ -101,39 +102,6 @@ export class BookStore
       sortDirection,
     })
   );
-
-  // loadBooks = this.effect<void>(
-  //   pipe(
-  //     withLatestFrom(
-  //       this._page$,
-  //       this._limit$,
-  //       this._searchTerm$,
-  //       this._selectedLanguages$,
-  //       this._sortColumn$,
-  //       this._sortDirection$
-  //     ),
-  //     tap(() => this.#setLoading()),
-  //     switchMap(
-  //       ([_, page, limit, searchTerm, language, sortColumn, sortDirection]) => {
-  //         return this._bookService
-  //           .getBooks({
-  //             page,
-  //             limit,
-  //             searchTerm,
-  //             language,
-  //             sortColumn,
-  //             sortDirection,
-  //           })
-  //           .pipe(
-  //             tapResponse(
-  //               (pagedBook: PagedBook) => this.#addAll(pagedBook),
-  //               (error: HttpErrorResponse) => this.#setError(error)
-  //             )
-  //           );
-  //       }
-  //     )
-  //   )
-  // );
 
   loadBooks = this.effect<GetBookParams>(
     pipe(

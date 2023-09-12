@@ -10,6 +10,7 @@ import { Book } from "./book.model";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "../shard/dialog.component";
 import { Subject, takeUntil, tap } from "rxjs";
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
   selector: "app-book",
@@ -31,8 +32,10 @@ import { Subject, takeUntil, tap } from "rxjs";
         </ng-container>
         <ng-template #nobooks> No books found </ng-template>
       </ng-template>
-      page: {{ vm.page }}
-      <button mat-raised-button (click)="nextPage(vm.page)">Next</button>
+      <app-paginator
+        [totalRecords]="vm.totalRecords"
+        (pageSelect)="onPageSelect($event, vm.page, vm.pageLimit)"
+      />
     </ng-container>
   `,
   styles: [],
@@ -69,6 +72,13 @@ export class BookComponent implements OnDestroy {
 
   onEdit(book: Book) {
     console.log(book);
+  }
+
+  onPageSelect(e: PageEvent, currentPage: number, currentPageLimit: number) {
+    const page = e.pageIndex + 1;
+    const pageLimit = e.pageSize;
+    if (page !== currentPage) this.store.setPage(page);
+    if (pageLimit !== currentPageLimit) this.store.setLimit(pageLimit);
   }
 
   ngOnDestroy(): void {
