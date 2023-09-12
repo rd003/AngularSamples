@@ -19,7 +19,6 @@ export class BookService {
     sortColumn = null,
     sortDirection = null,
   }: GetBookParams): Observable<PagedBook> {
-    //TODO: searchTerm is not getting passed
     var params = new HttpParams().set("page", page).set("limit", limit);
     if (languages) {
       params = params.set("languages", languages);

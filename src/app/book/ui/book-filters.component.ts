@@ -15,7 +15,7 @@ import { debounceTime, tap } from "rxjs";
       />
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field class="langFilter" appearance="outline">
       <mat-label>Language</mat-label>
       <mat-select [formControl]="language" multiple="">
         <mat-option
@@ -34,7 +34,8 @@ import { debounceTime, tap } from "rxjs";
         gap: 10px;
       }
 
-      .searchTerm {
+      .searchTerm,
+      .langFilter {
         width: 300px;
       }
     `,
@@ -42,7 +43,7 @@ import { debounceTime, tap } from "rxjs";
 })
 export class BookFiltersComponent {
   @Input({ required: true }) languages!: string[];
-  @Output() search = new EventEmitter<string>();
+  @Output() search = new EventEmitter<string | null>();
   @Output() selectedLanguages = new EventEmitter<string>();
   language = new FormControl<string[]>([]);
   searchTerm = new FormControl<string>("");
@@ -55,7 +56,7 @@ export class BookFiltersComponent {
       .pipe(
         debounceTime(300),
         tap((val) => {
-          if (val) this.search.emit(val);
+          this.search.emit(val);
         }),
         takeUntilDestroyed()
       )

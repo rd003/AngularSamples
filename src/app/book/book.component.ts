@@ -54,7 +54,7 @@ export class BookComponent implements OnDestroy {
   dialog = inject(MatDialog);
   destroyed$ = new Subject<boolean>();
 
-  searchBook(searchTerm: string) {
+  searchBook(searchTerm: string | null) {
     this.store.setSearchTerm(searchTerm);
   }
 

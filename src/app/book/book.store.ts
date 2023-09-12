@@ -82,7 +82,7 @@ export class BookStore
 
   setPage = this.updater((state, page: number) => ({ ...state, page }));
   setLimit = this.updater((state, limit: number) => ({ ...state, limit }));
-  setSearchTerm = this.updater((state, searchTerm: string) => ({
+  setSearchTerm = this.updater((state, searchTerm: string | null) => ({
     ...state,
     searchTerm,
   }));
