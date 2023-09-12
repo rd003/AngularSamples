@@ -10,6 +10,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSelectModule } from "@angular/material/select";
 
 const materialModules = [
   MatToolbarModule,
@@ -23,6 +24,7 @@ const materialModules = [
   MatSnackBarModule,
   MatProgressSpinnerModule,
   MatPaginatorModule,
+  MatSelectModule,
 ];
 
 @NgModule({

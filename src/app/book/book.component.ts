@@ -23,6 +23,12 @@ import { PageEvent } from "@angular/material/paginator";
         >Error on loading books</ng-container
       >
       <ng-template #noerror>
+        <!-- filters -->
+        <app-book-filters
+          (search)="searchBook($event)"
+          [languages]="['English', 'Hindi', 'Spanish', 'Italian']"
+        />
+        <!-- book-list -->
         <ng-container *ngIf="vm.books; else nobooks">
           <app-book-list
             [books]="vm.books"
@@ -47,8 +53,8 @@ export class BookComponent implements OnDestroy {
   dialog = inject(MatDialog);
   destroyed$ = new Subject<boolean>();
 
-  nextPage(currentPage: number) {
-    this.store.setPage(currentPage + 1);
+  searchBook(searchTerm: string) {
+    this.store.setSearchTerm(searchTerm);
   }
 
   onDelete(book: Book) {

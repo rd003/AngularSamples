@@ -19,11 +19,20 @@ export class BookService {
     sortColumn = null,
     sortDirection = null,
   }: GetBookParams): Observable<PagedBook> {
-    const params = new HttpParams().set("page", page).set("limit", limit);
-    if (language) params.set("language", language);
-    if (searchTerm) params.set("searchTerm", searchTerm);
-    if (sortColumn) params.set("sortColumn", sortColumn);
-    if (sortDirection) params.set("sortDirection", sortDirection);
+    //TODO: searchTerm is not getting passed
+    var params = new HttpParams().set("page", page).set("limit", limit);
+    if (language) {
+      params = params.set("language", language);
+    }
+    if (searchTerm) {
+      params = params.set("searchTerm", searchTerm);
+    }
+    if (sortColumn) {
+      params = params.set("sortColumn", sortColumn);
+    }
+    if (sortDirection) {
+      params = params.set("sortDirection", sortDirection);
+    }
     return this._http.get<PagedBook>(this.url, { params });
   }
 
