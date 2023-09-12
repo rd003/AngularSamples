@@ -23,6 +23,9 @@ import { PageEvent } from "@angular/material/paginator";
         >Error on loading books</ng-container
       >
       <ng-template #noerror>
+        <!-- filters -->
+
+        <!-- book-list -->
         <ng-container *ngIf="vm.books; else nobooks">
           <app-book-list
             [books]="vm.books"
