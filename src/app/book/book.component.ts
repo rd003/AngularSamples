@@ -26,6 +26,7 @@ import { PageEvent } from "@angular/material/paginator";
         <!-- filters -->
         <app-book-filters
           (search)="searchBook($event)"
+          (selectedLanguages)="filterByLanguages($event)"
           [languages]="['English', 'Hindi', 'Spanish', 'Italian']"
         />
         <!-- book-list -->
@@ -55,6 +56,10 @@ export class BookComponent implements OnDestroy {
 
   searchBook(searchTerm: string) {
     this.store.setSearchTerm(searchTerm);
+  }
+
+  filterByLanguages(languages: string) {
+    this.store.setLanguages(languages);
   }
 
   onDelete(book: Book) {

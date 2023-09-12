@@ -14,15 +14,15 @@ export class BookService {
   getBooks({
     page = 1,
     limit = 10,
-    language = null,
+    languages = null,
     searchTerm = null,
     sortColumn = null,
     sortDirection = null,
   }: GetBookParams): Observable<PagedBook> {
     //TODO: searchTerm is not getting passed
     var params = new HttpParams().set("page", page).set("limit", limit);
-    if (language) {
-      params = params.set("language", language);
+    if (languages) {
+      params = params.set("languages", languages);
     }
     if (searchTerm) {
       params = params.set("searchTerm", searchTerm);

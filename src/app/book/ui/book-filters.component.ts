@@ -6,7 +6,7 @@ import { debounceTime, tap } from "rxjs";
 @Component({
   selector: "app-book-filters",
   template: `
-    <mat-form-field class="searchTerm" appearance="fill">
+    <mat-form-field class="searchTerm" appearance="outline">
       <mat-label>Search</mat-label>
       <input
         [formControl]="searchTerm"
@@ -15,12 +15,15 @@ import { debounceTime, tap } from "rxjs";
       />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Language</mat-label>
-      <mat-select [formControl]="language" multiple>
-        <mat-option *ngFor="let language of languages" [value]="languages">{{
-          language
-        }}</mat-option>
+      <mat-select [formControl]="language" multiple="">
+        <mat-option
+          *ngFor="let lang of languages; trackBy: trackByLang"
+          [value]="lang"
+        >
+          {{ lang }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
   `,
@@ -40,8 +43,13 @@ import { debounceTime, tap } from "rxjs";
 export class BookFiltersComponent {
   @Input({ required: true }) languages!: string[];
   @Output() search = new EventEmitter<string>();
+  @Output() selectedLanguages = new EventEmitter<string>();
   language = new FormControl<string[]>([]);
   searchTerm = new FormControl<string>("");
+
+  trackByLang(index: number, lang: string) {
+    return lang;
+  }
   constructor() {
     this.searchTerm.valueChanges
       .pipe(
@@ -53,11 +61,14 @@ export class BookFiltersComponent {
       )
       .subscribe();
 
-    this.language.valueChanges.pipe(
-      tap((val) => {
-        console.log(val);
-      }),
-      takeUntilDestroyed()
-    );
+    this.language.valueChanges
+      .pipe(
+        tap((languages) => {
+          const langs = languages?.join(",");
+          this.selectedLanguages.emit(langs);
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
   }
 }

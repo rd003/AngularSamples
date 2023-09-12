@@ -24,7 +24,7 @@ export interface PagedBook {
 export interface GetBookParams {
   page?: number;
   limit?: number;
-  language?: string | null;
+  languages?: string | null;
   searchTerm?: string | null;
   sortColumn?: string | null;
   sortDirection?: string | null;

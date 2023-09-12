@@ -17,7 +17,7 @@ interface BookState {
   page: number;
   limit: number;
   searchTerm: string | null;
-  selectedLanguages: string[];
+  selectedLanguages: string | null;
   sortColumn: string | null;
   sortDirection: "asc" | "desc" | null;
 }
@@ -29,7 +29,7 @@ const _initialState: BookState = {
   page: 1,
   limit: 10,
   searchTerm: null,
-  selectedLanguages: [],
+  selectedLanguages: null,
   sortColumn: null,
   sortDirection: null,
 };
@@ -49,8 +49,8 @@ export class BookStore
   private readonly _page$ = this.select((s) => s.page);
   private readonly _limit$ = this.select((s) => s.limit);
   private readonly _searchTerm$ = this.select((s) => s.searchTerm);
-  private readonly _selectedLanguages$ = this.select((s) =>
-    s.selectedLanguages.join(",")
+  private readonly _selectedLanguages$ = this.select(
+    (s) => s.selectedLanguages
   );
   private readonly _sortColumn$ = this.select((s) => s.sortColumn);
   private readonly _sortDirection$ = this.select((s) => s.sortDirection);
@@ -86,7 +86,7 @@ export class BookStore
     ...state,
     searchTerm,
   }));
-  setLanguages = this.updater((state, selectedLanguages: string[]) => ({
+  setLanguages = this.updater((state, selectedLanguages: string) => ({
     ...state,
     selectedLanguages,
   }));
@@ -96,24 +96,22 @@ export class BookStore
     sortColumn,
   }));
 
-  #setColumnDirection = this.updater(
-    (state, sortDirection: "asc" | "desc") => ({
-      ...state,
-      sortDirection,
-    })
-  );
+  setColumnDirection = this.updater((state, sortDirection: "asc" | "desc") => ({
+    ...state,
+    sortDirection,
+  }));
 
   loadBooks = this.effect<GetBookParams>(
     pipe(
       tap(() => this.#setLoading()),
       switchMap(
-        ({ page, limit, searchTerm, language, sortColumn, sortDirection }) => {
+        ({ page, limit, searchTerm, languages, sortColumn, sortDirection }) => {
           return this._bookService
             .getBooks({
               page,
               limit,
               searchTerm,
-              language,
+              languages,
               sortColumn,
               sortDirection,
             })
@@ -142,12 +140,12 @@ export class BookStore
     ])
       .pipe(
         tap(
-          ([page, limit, searchTerm, language, sortColumn, sortDirection]) => {
+          ([page, limit, searchTerm, languages, sortColumn, sortDirection]) => {
             this.loadBooks({
               page,
               limit,
               searchTerm,
-              language,
+              languages,
               sortColumn,
               sortDirection,
             });
