@@ -27,7 +27,7 @@ import { PageEvent } from "@angular/material/paginator";
         <app-book-filters
           (search)="searchBook($event)"
           (selectedLanguages)="filterByLanguages($event)"
-          [languages]="['English', 'Hindi', 'Spanish', 'Italian']"
+          [languages]="vm.languages"
         />
         <!-- book-list -->
         <ng-container *ngIf="vm.books; else nobooks">

@@ -35,8 +35,8 @@ export class BookService {
     return this._http.get<PagedBook>(this.url, { params });
   }
 
-  getLanguages(): Observable<string> {
-    return this._http.get<string>(this.url + "/languages");
+  getLanguages(): Observable<string[]> {
+    return this._http.get<string[]>(this.url + "/languages");
   }
 
   getBook(id: number): Observable<Book> {

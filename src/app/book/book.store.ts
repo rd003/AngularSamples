@@ -20,6 +20,7 @@ interface BookState {
   selectedLanguages: string | null;
   sortColumn: string | null;
   sortDirection: "asc" | "desc" | null;
+  languages: string[];
 }
 
 const _initialState: BookState = {
@@ -32,6 +33,7 @@ const _initialState: BookState = {
   selectedLanguages: null,
   sortColumn: null,
   sortDirection: null,
+  languages: [],
 };
 
 @Injectable()
@@ -54,6 +56,7 @@ export class BookStore
   );
   private readonly _sortColumn$ = this.select((s) => s.sortColumn);
   private readonly _sortDirection$ = this.select((s) => s.sortDirection);
+  private readonly _languages$ = this.select((s) => s.languages);
 
   vm$ = this.select(
     {
@@ -63,6 +66,7 @@ export class BookStore
       totalRecords: this._totalRecords$,
       page: this._page$,
       pageLimit: this._limit$,
+      languages: this._languages$,
     },
     { debounce: true }
   );
@@ -78,6 +82,12 @@ export class BookStore
     ...state,
     loading: false,
     pagedBooks,
+  }));
+
+  #addLanguages = this.updater((state, languages: string[]) => ({
+    ...state,
+    loading: false,
+    languages,
   }));
 
   setPage = this.updater((state, page: number) => ({ ...state, page }));
@@ -101,7 +111,7 @@ export class BookStore
     sortDirection,
   }));
 
-  loadBooks = this.effect<GetBookParams>(
+  private readonly loadBooks = this.effect<GetBookParams>(
     pipe(
       tap(() => this.#setLoading()),
       switchMap(
@@ -126,10 +136,25 @@ export class BookStore
     )
   );
 
+  private readonly loadLanguages = this.effect<void>(
+    pipe(
+      tap(() => this.#setLoading()),
+      switchMap(() =>
+        this._bookService.getLanguages().pipe(
+          tapResponse(
+            (languages) => this.#addLanguages(languages),
+            (error: HttpErrorResponse) => this.#setError(error)
+          )
+        )
+      )
+    )
+  );
+
   ngrxOnStoreInit() {
     this.setState({ ..._initialState });
   }
   ngrxOnStateInit() {
+    this.loadLanguages();
     combineLatest([
       this._page$,
       this._limit$,
