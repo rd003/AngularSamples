@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { Book, GetBookParams, PagedBook } from "./book.model";
+import { GetBookParams, PagedBook } from "./book.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { combineLatest, pipe, switchMap, tap, withLatestFrom } from "rxjs";
 import {
@@ -19,7 +19,7 @@ interface BookState {
   searchTerm: string | null;
   selectedLanguages: string | null;
   sortColumn: string | null;
-  sortDirection: "asc" | "desc" | null;
+  sortDirection: string | null;
   languages: string[];
 }
 
@@ -106,7 +106,7 @@ export class BookStore
     sortColumn,
   }));
 
-  setColumnDirection = this.updater((state, sortDirection: "asc" | "desc") => ({
+  setSortDirection = this.updater((state, sortDirection: string) => ({
     ...state,
     sortDirection,
   }));

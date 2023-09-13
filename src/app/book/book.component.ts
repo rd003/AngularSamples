@@ -11,6 +11,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "../shard/dialog.component";
 import { Subject, takeUntil, tap } from "rxjs";
 import { PageEvent } from "@angular/material/paginator";
+import { Sort } from "@angular/material/sort";
 
 @Component({
   selector: "app-book",
@@ -35,6 +36,7 @@ import { PageEvent } from "@angular/material/paginator";
             [books]="vm.books"
             (deleteBook)="onDelete($event)"
             (editBook)="onEdit($event)"
+            (sortData)="onSortData($event)"
           />
         </ng-container>
         <ng-template #nobooks> No books found </ng-template>
@@ -90,6 +92,11 @@ export class BookComponent implements OnDestroy {
     const pageLimit = e.pageSize;
     if (page !== currentPage) this.store.setPage(page);
     if (pageLimit !== currentPageLimit) this.store.setLimit(pageLimit);
+  }
+
+  onSortData(sort: Sort) {
+    this.store.setSortColumn(sort.active);
+    this.store.setSortDirection(sort.direction);
   }
 
   ngOnDestroy(): void {
