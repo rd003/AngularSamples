@@ -1,27 +1,18 @@
 # AngularSamples
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.
+It is just a practice project for myself. I am testing few things.
 
-## Development server
+## Tech stack
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Angular 16
+- Ngrx component store and behavior subject for state management.
+- Json server, .net core apis, typicodes apis for backend.
 
-## Code scaffolding
+## Sections
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Home : nothing
+- Books : `Crud + filtering+ Pagination` with `ngrx component store` and .net core apis. Github repo for apis: https://github.com/rd003/BookHundred
+- Person: Crud with `behavior subject`. Using json server as a backend. To start the server, type `npm run server`.
+- User: Displaying users and post. Not need to run server, using typicode's api here. Key point: using `resolver` here.
+- Greeting: Simple demo for `template outlet context `
+- Tables: More complex demo for `template outlet context`

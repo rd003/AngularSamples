@@ -7,7 +7,7 @@ import { UserModel } from "./user.model";
   selector: "app-user",
   template: `
     <div style="width: 70%;margin:auto;">
-      <h1>Users</h1>
+      <h1>Users(using resolver)</h1>
       <ng-container *ngIf="users$ | async as users; else loading">
         <table mat-table [dataSource]="users">
           <ng-container matColumnDef="name">
