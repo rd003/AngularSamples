@@ -1,7 +1,14 @@
 import { Injectable, inject } from "@angular/core";
-import { GetBookParams, PagedBook } from "./book.model";
+import { Book, GetBookParams, PagedBook, PaginationData } from "./book.model";
 import { HttpErrorResponse } from "@angular/common/http";
-import { combineLatest, pipe, switchMap, tap, withLatestFrom } from "rxjs";
+import {
+  Observable,
+  combineLatest,
+  pipe,
+  switchMap,
+  tap,
+  withLatestFrom,
+} from "rxjs";
 import {
   ComponentStore,
   OnStateInit,
@@ -90,6 +97,45 @@ export class BookStore
     languages,
   }));
 
+  #addOne = this.updater((state, book: Book) => {
+    const updatedPagedBooks: PagedBook = {
+      ...state.pagedBooks,
+      books: [...state.pagedBooks.books, book],
+      paginationData: {
+        ...state.pagedBooks.paginationData,
+        totalRecords: state.pagedBooks.paginationData.totalRecords + 1,
+        totalPages: Math.ceil(
+          (state.pagedBooks.paginationData.totalRecords + 1) / state.limit
+        ),
+      },
+    };
+    return { ...state, loading: false, pagedBooks: updatedPagedBooks };
+  });
+
+  #updateBook = this.updater((state, book: Book) => ({
+    ...state,
+    loading: false,
+    pagedBooks: {
+      ...state.pagedBooks,
+      books: state.pagedBooks.books.map((b) => (b.id === book.id ? book : b)),
+    },
+  }));
+
+  #removeOne = this.updater((state, id: number) => {
+    const updatedPagedBooks: PagedBook = {
+      ...state.pagedBooks,
+      books: state.pagedBooks.books.filter((a) => a.id !== id),
+      paginationData: {
+        ...state.pagedBooks.paginationData,
+        totalRecords: state.pagedBooks.paginationData.totalRecords - 1,
+        totalPages: Math.ceil(
+          (state.pagedBooks.paginationData.totalRecords - 1) / state.limit
+        ),
+      },
+    };
+    return { ...state, loading: false, pagedBooks: updatedPagedBooks };
+  });
+
   setPage = this.updater((state, page: number) => ({ ...state, page }));
   setLimit = this.updater((state, limit: number) => ({ ...state, limit }));
   setSearchTerm = this.updater((state, searchTerm: string | null) => ({
@@ -143,6 +189,51 @@ export class BookStore
         this._bookService.getLanguages().pipe(
           tapResponse(
             (languages) => this.#addLanguages(languages),
+            (error: HttpErrorResponse) => this.#setError(error)
+          )
+        )
+      )
+    )
+  );
+
+  readonly addBook = this.effect<Book>((book$: Observable<Book>) =>
+    book$.pipe(
+      tap(() => this.#setLoading()),
+      switchMap((book) =>
+        this._bookService.addBook(book).pipe(
+          tapResponse(
+            (createdBook: Book) => {
+              this.#addOne(createdBook);
+              this.loadLanguages();
+            },
+            (error: HttpErrorResponse) => this.#setError(error)
+          )
+        )
+      )
+    )
+  );
+
+  readonly updateBook = this.effect<Book>((book$: Observable<Book>) =>
+    book$.pipe(
+      tap(() => this.#setLoading()),
+      switchMap((book) =>
+        this._bookService.updateBook(book).pipe(
+          tapResponse(
+            () => this.#updateBook(book),
+            (error: HttpErrorResponse) => this.#setError(error)
+          )
+        )
+      )
+    )
+  );
+
+  readonly removeBook = this.effect<number>((id$: Observable<number>) =>
+    id$.pipe(
+      tap(() => this.#setLoading),
+      switchMap((id) =>
+        this._bookService.deleteBook(id).pipe(
+          tapResponse(
+            () => this.#removeOne(id),
             (error: HttpErrorResponse) => this.#setError(error)
           )
         )

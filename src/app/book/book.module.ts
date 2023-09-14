@@ -9,6 +9,7 @@ import { BookDetailComponent } from "./ui/book-detail.component";
 import { PaginatorComponent } from "./ui/paginator.component";
 import { BookFiltersComponent } from "./ui/book-filters.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { BookDialogComponent } from './ui/book-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ReactiveFormsModule } from "@angular/forms";
     BookDetailComponent,
     PaginatorComponent,
     BookFiltersComponent,
+    BookDialogComponent,
   ],
   imports: [
     CommonModule,
