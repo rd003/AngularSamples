@@ -82,6 +82,7 @@ export class BookComponent implements OnDestroy {
     dialogRef.componentInstance.sumbit
       .pipe(takeUntil(this.destroyed$))
       .subscribe((submittedBook) => {
+        debugger;
         if (!submittedBook) return;
         if (submittedBook.id === 0) {
           this.store.addBook(submittedBook);

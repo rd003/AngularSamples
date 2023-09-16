@@ -6,7 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "server": "json-server --watch db.json"
+    "server": "json-server --watch db.json",
+    "dev:ssr": "ng run AngularSamples:serve-ssr",
+    "serve:ssr": "node dist/AngularSamples/server/main.js",
+    "build:ssr": "ng build && ng run AngularSamples:server",
+    "prerender": "ng run AngularSamples:prerender"
   },
   "private": true,
   "dependencies": {
@@ -19,9 +23,12 @@
     "@angular/material": "16.2.0",
     "@angular/platform-browser": "^16.0.0",
     "@angular/platform-browser-dynamic": "^16.0.0",
+    "@angular/platform-server": "^16.0.0",
     "@angular/router": "^16.0.0",
     "@ngneat/falso": "^7.1.0",
     "@ngrx/component-store": "^16.2.0",
+    "@nguniversal/express-engine": "^16.2.0",
+    "express": "^4.15.2",
     "ngx-rlibs": "^0.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -31,6 +38,9 @@
     "@angular-devkit/build-angular": "^16.0.0",
     "@angular/cli": "~16.0.0",
     "@angular/compiler-cli": "^16.0.0",
+    "@nguniversal/builders": "^16.2.0",
+    "@types/express": "^4.17.0",
+    "@types/node": "^14.15.0",
     "typescript": "~5.0.2"
   }
 }
